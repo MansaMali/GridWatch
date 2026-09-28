@@ -17,8 +17,8 @@ Database
 
 Installation:
 Requirements
-Python 3.x
-Git
+Python 3.x,
+Git,
 SQLite
 
 Clone the Repository
