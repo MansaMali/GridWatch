@@ -109,3 +109,14 @@ creating scenario cycle to allow program to run without continously stopping and
 this was accomlplished by adding self.scenario_cycle = 0 otherwise known as a counter. then I set up a if scenario >= 10: enter recovery mode, then from recovery mode it enters normal mode. the testing involed making sure eac iteration worked before adding another feature. first I tested to make sure cycles poped up in the terminal, after that I had to investigate whether the cycle would automatically go thorugh all the iteration and print the required messages. such as alarm clear when it reaches normal.
 
 Next session: Finish the scenario cycle by allowing full transition into each mode, then add an event managment system to record all alarms and changes.
+
+
+2026-09-27
+
+GOAL: Complete implementation of scenario cycle and begin work on event management
+
+completed: finished the automatic scenario cycle by adding a limit to scenario cycles within recovery mode once this limit is reached it sets self.simulation mode to NORMAL.
+
+next I added the event history, which is populated with active alarms. I created a dictionary to hold the active alarms and added event_history into the def operator display and its call within main.py. starting to see a design pattern form. 
+
+then I corrected an error because I used a slice that formatted a list instead of a dictionary. A list is more practical for creating a list of events that took place rather than usign a dictionary due to the usage of the information. for instance active alarm uses a dictionary to find specfic information ro be used while event history is just recording the alarsm from acrive alarms and we only need to see what happened rather than a specic data point.

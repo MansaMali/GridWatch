@@ -27,7 +27,8 @@ def display_operator_dashboard(
     breaker_data,
     capacitor_data,
     dashboard_health,
-    active_alarms
+    active_alarms,
+    event_history
 ):
     
     print()
@@ -78,6 +79,15 @@ def display_operator_dashboard(
             f"{alarm['status']} |"
             f"{alarm['reason']}"
         )
+
+    print()
+    print("EVENT HISTORY")
+    print("-" * 50)
+
+    for event in event_history[-10:]:
+        
+        print(event)
+
 
 
 
@@ -340,6 +350,8 @@ previous_health_status = {
 
 active_alarms = {}
 
+event_history = []
+
 simulation_mode = "NORMAL"
 
 while True:
@@ -414,6 +426,10 @@ while True:
                     "reason": health_reason
                 }
 
+                event_history.append(
+                    f"{asset_id} | NEW ALARM | {health_status}"
+                )
+
                 print()
                 print(f"NEW ALARM: {asset_id}")
 
@@ -422,6 +438,10 @@ while True:
             if asset_id in active_alarms:
 
                 del active_alarms[asset_id]
+
+                event_history.append(
+                    f"{asset_id} | ALARM CLEARED"
+                )
 
                 print()
                 print(f"ALARM CLEARED: {asset_id}")
@@ -442,7 +462,8 @@ while True:
             breaker_data,
             capacitor_data,
             dashboard_health,
-            active_alarms
+            active_alarms,
+            event_history
     )
 
     events = get_events()
