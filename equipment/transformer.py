@@ -65,8 +65,7 @@ class Transformer:
 
                 print(f"{self.asset_id} entering RECOVERY mode")
 
-        elif self.simulation_mode == "RECOVERY":
-                
+        elif self.simulation_mode == "RECOVERY":  
                 
             self.voltage += random.randint(-15,15)
     
@@ -75,6 +74,14 @@ class Transformer:
             self.temperature += random.randint(-5, -1)
         
             self.load_percent += random.randint(-5, -1)
+
+            if self.scenario_cycles >10:
+
+                self.simulation_mode = "NORMAL"
+
+                self.scenario_cycles = 0
+
+                print(f"{self.asset_id} returning to NORMAL mode")
 
 
 
