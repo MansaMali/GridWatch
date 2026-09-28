@@ -4,6 +4,8 @@ Project Overview
 GridWatch is a Python-based SCADA-inspired substation monitoring platform designed to simulate electrical equipment, collect and analyze telemetry, detect abnormal operating conditions, manage alarms, and provide operators with a centralized view of substation health.
 Future development will extend GridWatch into the cybersecurity side of industrial control systems (ICS/SCADA), including security-event monitoring, anomalous activity detection, and correlation between cybersecurity events and equipment conditions.
 
+
+
 Features:
 Equipment Simulation
 Telemetry Monitoring
@@ -41,6 +43,8 @@ If dependencies are added later, they should be installed with:
 
 pip install -r requirements.txt
 
+
+
 Usage:
 
 Start the monitoring system with:
@@ -77,6 +81,8 @@ TX-102 entering RECOVERY mode
 ALARM CLEARED: TX-102
 
 TX-102 returning to NORMAL mode
+
+
 
 Future Improvements:
 
