@@ -41,7 +41,8 @@ If dependencies are added later, they should be installed with:
 
 pip install -r requirements.txt
 
-Usage
+Usage:
+
 Start the monitoring system with:
 
 python main.py
