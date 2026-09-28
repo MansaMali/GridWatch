@@ -79,6 +79,7 @@ ALARM CLEARED: TX-102
 TX-102 returning to NORMAL mode
 
 Future Improvements:
+
 Data & Monitoring(
 Historical telemetry visualization
 Long-term equipment trends
