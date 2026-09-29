@@ -120,3 +120,16 @@ completed: finished the automatic scenario cycle by adding a limit to scenario c
 next I added the event history, which is populated with active alarms. I created a dictionary to hold the active alarms and added event_history into the def operator display and its call within main.py. starting to see a design pattern form. 
 
 then I corrected an error because I used a slice that formatted a list instead of a dictionary. A list is more practical for creating a list of events that took place rather than usign a dictionary due to the usage of the information. for instance active alarm uses a dictionary to find specfic information ro be used while event history is just recording the alarsm from acrive alarms and we only need to see what happened rather than a specic data point.
+
+Next session: Upgrade event history to include more useful information
+
+
+2026-09-28
+
+Goal: add timestamps and sceanrio changes to event history.
+
+lesson learned: adding timestamp works but adding from datime import datetime which loads in the module datetime and allows us to use some predefined functions like datetime.now() then we format our event_history to iclude the varaible timestamp = datetime.now().strftime. which is hold the current datetime formatted in a text format in a varaible called timestamp. then we add that to our event_history.append with asset_id to include {timestamp}
+
+Then the next problem was converting the timestamp into a dictionary due to how much easier retrival would be now that its formated into data rather than searching through unformatted stirngs.
+
+to accomplish this, I convertered event_history.append into a dictionary instead of f""{}

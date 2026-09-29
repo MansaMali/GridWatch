@@ -1,5 +1,6 @@
 import time
 
+from datetime import datetime
 from equipment.transformer import Transformer
 from equipment.breaker import Breaker
 from equipment.capacitor_bank import CapacitorBank
@@ -86,7 +87,14 @@ def display_operator_dashboard(
 
     for event in event_history[-10:]:
         
-        print(event)
+        print(
+            f"{event['timestamp']} | "
+            f"{event['asset_id']} | "
+            f"{event['event_type']} | "
+            f"{event['details']} | "
+
+        )
+
 
 
 
@@ -426,9 +434,17 @@ while True:
                     "reason": health_reason
                 }
 
-                event_history.append(
-                    f"{asset_id} | NEW ALARM | {health_status}"
+                timestamp = datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
                 )
+
+                event_history.append({
+
+                    "timestamp": timestamp,
+                    "asset_id": asset_id,
+                    "event_type": "NEW ALARM",
+                    "details": health_status
+                })
 
                 print()
                 print(f"NEW ALARM: {asset_id}")
@@ -439,9 +455,17 @@ while True:
 
                 del active_alarms[asset_id]
 
-                event_history.append(
-                    f"{asset_id} | ALARM CLEARED"
+                timestamp = datetime.now().strftime(
+                    "%Y-%m-%d %H:%M:%S"
                 )
+                
+                event_history.append({
+
+                    "timestamp": timestamp,
+                    "asset_id": asset_id,
+                    "event_type": "ALARM CLEARED",
+                    "details": "NORMAL"
+                })
 
                 print()
                 print(f"ALARM CLEARED: {asset_id}")

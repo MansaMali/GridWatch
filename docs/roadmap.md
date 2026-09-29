@@ -10,9 +10,10 @@
 
 Phase 2 
 [X] Console dashboard
-[!] Alarm Manager
+[x] Alarm Manager
 
 Phase 3 
+[!]Event Manager
 [] Flask Web Dashboard
 [] Historical Charts
 [] Multi-substation support
