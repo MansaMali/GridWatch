@@ -170,6 +170,31 @@ def run_monitoring_cycle():
     for transformer in transformers:
         transformer.update()
 
+    for transformer in transformers:
+        asset_id = transformer.asset_id
+        previous_mode = previous_modes.get(asset_id)
+        current_mode = transformer.simulation_mode
+
+        if previous_mode != current_mode:
+            print(
+                f"MODE CHANGE: "
+                f"{asset_id} | "
+                f"{previous_mode} -> {current_mode}"
+            )
+
+            timestamp = datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            )
+
+            event_history.append({
+                "timestamp": timestamp,
+                "asset_id": asset_id,
+                "event_type": "MODE CHANGE",
+                "details": f"{previous_mode} -> {current_mode}"
+            })
+
+            previous_modes[asset_id] = current_mode
+
     for breaker in breakers:
         breaker.update()
 
@@ -355,6 +380,12 @@ previous_health_status = {
     transformer.asset_id: "NORMAL"
     for transformer in transformers
 }
+
+previous_modes = {
+    transformer.asset_id: transformer.simulation_mode
+    for transformer in transformers
+}
+
 
 active_alarms = {}
 

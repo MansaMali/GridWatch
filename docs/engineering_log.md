@@ -15,9 +15,6 @@ Next session:
 - improve event state transitions
 
 
-
-
-
 2026-09-05
 
 Goal: Improve event state transitions and add documentation '
@@ -45,7 +42,6 @@ lessons learned: Learned the value of testing and implemented new iterations. te
 
 
 Next session: Add an operators dashboard
-
 
 
 
@@ -128,8 +124,25 @@ Next session: Upgrade event history to include more useful information
 
 Goal: add timestamps and sceanrio changes to event history.
 
+Completed: Added timestamps to event history, added transitions to event history
+
 lesson learned: adding timestamp works but adding from datime import datetime which loads in the module datetime and allows us to use some predefined functions like datetime.now() then we format our event_history to iclude the varaible timestamp = datetime.now().strftime. which is hold the current datetime formatted in a text format in a varaible called timestamp. then we add that to our event_history.append with asset_id to include {timestamp}
 
 Then the next problem was converting the timestamp into a dictionary due to how much easier retrival would be now that its formated into data rather than searching through unformatted stirngs.
 
 to accomplish this, I convertered event_history.append into a dictionary instead of f""{}
+
+Had an issue where I updated the readme on GITHUB manually then when I tried to push my timestamp upgrade i ran into an error. this error was due to a conflict of merging errors, github has an change that wasnt pulled so to fix this you have to git pull origin master, press esc to accept the default message type :wq and press enter to save the merge, then git push origin master to complete the commit. my url also changed to GridWatch so i had to use git remote set-url origin [url] to change that.
+
+when adding a dictionary you can use this syntax to create a dictionary and loop through the variable to populate the dictionary 
+previous_modes = {
+    transformer.asset_id: transformer.simulation_mode
+    for transformer in transformers
+}
+
+compared to this 
+previous_modes = {}
+
+for transformer in transformers:
+
+    previous_modes[transformer.asset_id] = transformer.simulation_mode
