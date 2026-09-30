@@ -146,3 +146,37 @@ previous_modes = {}
 for transformer in transformers:
 
     previous_modes[transformer.asset_id] = transformer.simulation_mode
+
+next session: update Gridwatch to use sql database instead of memory for event history
+
+
+2026-09-29
+
+Goal: Configure event_history to use sql instead of event_history[]
+
+completed: commited transformer event tracking , and implemented first iteration of changeover to using sql
+
+Lessons learnerd: During the early sage of the project I used a event_history[] to store event_history to be displayed in the dashboard. however, having both built in memory and sql memory is redundant so using the sql memory which is persistant, makes more sense. To fix this i had to delete the event_history built in memory, then i had to remove event_history from funcions and calls containing it. finally, I added a loop that prints events[5],[4],[1],[2], these numbers reference the database.py get events parameters.
+
+I ran into another problem where my dashboard was displaying a mix of health report data (Normal, Watch, Warning) and operational event (Mode change new alarm, alarm cleared) WIth the dashboard we want a architecture that has health reports reporting health specific information, while operational records significant operator/systems events. mode change | overload-> recoery or tx-102 | new alarm| warning. my dashboard was mixing TX-103 | NORMAL | Transformer operating normally. to accomplish this i had to go to if health_status != previous_status: inserevent. so this was giving health status information into the events table which is where the operational changes happen. (Think what does the operator need to see based on the architecture)
+
+Next Session: Finish testing event_history and upgrade the alarm transition
+
+
+2026-09-30
+
+Goal: Update the alarm tranisition to start all transformers at normal and set automatic state transitions from there.
+
+Completed: 
+
+lessons learned: understanding where to add code logically. I had to think logically about where to add this automatic transition into an overload state. after run_monitor cylce() which collects all the reading then update the scenario cycle. this is where is add if transformer[1].scenario cycle == 5: then set simulation mode to overload.
+
+then i ran into a problem with not getting the full transition back into normal to get the alarm clear. I had to go into transformer.py and change the threshold from if scenario_cycle >20 -> 10 tjen i changed it to 5. However, i ran into a problem with the terminal always reseting bac kto 5 into overload. to fix this I deleted the previous_mode code which set the set the simulation od based on the cycles. i changes it into a dictionary setting each transformer to normal, then i set the transformer[2] simulation mode to OVERLOAD. now the code catches the mode change from normal to overload, into recovry, into normal which shows alarm clear.
+
+then I needed to save the alarm system to the database, I did this by addin insert_event to new alarm and alarm clear section. also alarm clear would del the active alarm so I had to save the active alarm as previous_alarm_status to save that information into the insert event.
+
+
+
+
+
+

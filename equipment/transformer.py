@@ -57,7 +57,7 @@ class Transformer:
             if self.load_percent > 110:
                 self.load_percent = 105
 
-            if self.scenario_cycles >= 20:
+            if self.scenario_cycles >= 5:
 
                 self.simulation_mode = "RECOVERY"
 
@@ -75,7 +75,7 @@ class Transformer:
         
             self.load_percent += random.randint(-5, -1)
 
-            if self.scenario_cycles >20:
+            if self.scenario_cycles >= 5:
 
                 self.simulation_mode = "NORMAL"
 

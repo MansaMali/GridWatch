@@ -29,7 +29,6 @@ def display_operator_dashboard(
     capacitor_data,
     dashboard_health,
     active_alarms,
-    event_history
 ):
     
     print()
@@ -85,13 +84,15 @@ def display_operator_dashboard(
     print("EVENT HISTORY")
     print("-" * 50)
 
-    for event in event_history[-10:]:
+    events = get_events()
+
+    for event in events[:10]:
         
         print(
-            f"{event['timestamp']} | "
-            f"{event['asset_id']} | "
-            f"{event['event_type']} | "
-            f"{event['details']} | "
+            f"{event[5]} | "
+            f"{event[1]} | "
+            f"{event[2]} -> {event[3]} | "
+            f"{event[4]} | "
 
         )
 
@@ -186,12 +187,13 @@ def run_monitoring_cycle():
                 "%Y-%m-%d %H:%M:%S"
             )
 
-            event_history.append({
-                "timestamp": timestamp,
-                "asset_id": asset_id,
-                "event_type": "MODE CHANGE",
-                "details": f"{previous_mode} -> {current_mode}"
-            })
+            insert_event(
+                asset_id,
+                previous_mode,
+                current_mode,
+                "MODE CHANGE",
+                timestamp
+            )
 
             previous_modes[asset_id] = current_mode
 
@@ -317,15 +319,7 @@ def analyze_transformer_health(
         increasing
     )
 
-    if health_status != previous_status:
-
-        insert_event(
-            asset_id,
-            previous_status,
-            health_status,
-            health_reason,
-            str(transformer_data["timestamp"])
-        )
+    
 
     insert_health_reports(
         transformer_data["asset_id"],
@@ -382,14 +376,19 @@ previous_health_status = {
 }
 
 previous_modes = {
-    transformer.asset_id: transformer.simulation_mode
-    for transformer in transformers
+    "TX-101": "NORMAL",
+    "TX-102": "NORMAL",
+    "TX-103": "NORMAL"
 }
+
+# previous_modes = {
+#     transformer.asset_id: transformer.simulation_mode
+#     for transformer in transformers
+# }
 
 
 active_alarms = {}
 
-event_history = []
 
 simulation_mode = "NORMAL"
 
@@ -397,6 +396,8 @@ while True:
 
     transformer_data, breaker_data, capacitor_data = run_monitoring_cycle()
 
+
+  
     dashboard_health = {}
 
 
@@ -469,37 +470,40 @@ while True:
                     "%Y-%m-%d %H:%M:%S"
                 )
 
-                event_history.append({
-
-                    "timestamp": timestamp,
-                    "asset_id": asset_id,
-                    "event_type": "NEW ALARM",
-                    "details": health_status
-                })
-
                 print()
                 print(f"NEW ALARM: {asset_id}")
+
+                insert_event(
+                    asset_id,
+                    "NORMAL",
+                    health_status,
+                    "ALARM CREATED",
+                    timestamp
+                )
 
         if health_status == "NORMAL":
 
             if asset_id in active_alarms:
+
+                previous_alarm_status = active_alarms[asset_id]["status"]
 
                 del active_alarms[asset_id]
 
                 timestamp = datetime.now().strftime(
                     "%Y-%m-%d %H:%M:%S"
                 )
-                
-                event_history.append({
-
-                    "timestamp": timestamp,
-                    "asset_id": asset_id,
-                    "event_type": "ALARM CLEARED",
-                    "details": "NORMAL"
-                })
+            
 
                 print()
                 print(f"ALARM CLEARED: {asset_id}")
+
+                insert_event(
+                    asset_id,
+                    previous_alarm_status,
+                    "NORMAL",
+                    "ALARM CLEARED",
+                    timestamp
+                )
 
         display_health_report(
             asset_id,
@@ -518,7 +522,6 @@ while True:
             capacitor_data,
             dashboard_health,
             active_alarms,
-            event_history
     )
 
     events = get_events()
