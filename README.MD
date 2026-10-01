@@ -1,77 +1,79 @@
 GridWatch — SCADA Substation Monitoring & Cybersecurity Platform
+Overview
 
-Project Overview
-GridWatch is a Python-based SCADA-inspired substation monitoring platform designed to simulate electrical equipment, collect and analyze telemetry, detect abnormal operating conditions, manage alarms, and provide operators with a centralized view of substation health.
-Future development will extend GridWatch into the cybersecurity side of industrial control systems (ICS/SCADA), including security-event monitoring, anomalous activity detection, and correlation between cybersecurity events and equipment conditions.
+GridWatch is a Python-based SCADA-inspired monitoring platform designed to simulate electrical substation operations and equipment monitoring. The project models critical substation assets, collects telemetry, analyzes equipment health, manages alarms, and provides operators with a centralized view of system conditions.
+
+The project was developed to combine software engineering, industrial control systems (ICS/SCADA), and cybersecurity concepts while providing hands-on experience with technologies used in critical infrastructure environments.
 
 
-
-Features:
+Key Features
 Equipment Simulation
-Telemetry Monitoring
+
+Simulates electrical substation equipment, including:
+
+Power Transformers
+Circuit Breakers
+Capacitor Banks
+Telemetry Collection
+
+Collects and processes operational data such as:
+
+Voltage
+Current
+Temperature
+Equipment Load
+Equipment Status
+Reactive Power
 Equipment Health Analysis
+
+Evaluates equipment conditions using:
+
+Operating thresholds
+Trend analysis
+Status classification
+Abnormal-condition detection
 Alarm Management
+
+Provides automated alarm functionality:
+
+New alarm generation
+Active alarm tracking
+Alarm-clearing notifications
+Equipment recovery monitoring
 Operator Dashboard
-Event History
-Database
 
+Provides a centralized operational view of:
 
+Equipment conditions
+Health status
+Active alarms
+System-wide monitoring information
+Data Storage
 
-Installation:
-Requirements
-Python 3.x,
-Git,
+Uses SQLite to store:
+
+Telemetry records
+Equipment events
+Historical operating data
+Technologies Used
+Python
 SQLite
+Git
+GitLab
+Visual Studio Code
+System Workflow
 
-Clone the Repository
-git clone <repository-url>
-cd Nisource_project
-Create a Virtual Environment
-For Windows:
-python -m venv venv
+GridWatch continuously performs monitoring cycles:
 
-Activate the environment:
-venv\Scripts\activate
-
-Install Dependencies
-
-If the project has no external dependencies:
-
-# No external packages currently required
-
-If dependencies are added later, they should be installed with:
-
-pip install -r requirements.txt
-
-
-
-Usage:
-
-Start the monitoring system with:
-
-python main.py
-
-The system continuously runs monitoring cycles.
-
-Each cycle:
-
-Updates simulated equipment.
-Collects equipment telemetry.
-Stores telemetry in the database.
-Analyzes equipment health.
-Evaluates alarm conditions.
-Records important events.
-Updates the operator dashboard.
-Waits before beginning the next monitoring cycle.
-
-Example equipment output:
-
-TX-101 | Mode: NORMAL | Cycles: 1
-TX-102 | Mode: OVERLOAD | Cycles: 1
-TX-103 | Mode: NORMAL | Cycles: 1
-
-Example alarm lifecycle:
-
+Update simulated equipment conditions
+Collect equipment telemetry
+Store telemetry in the database
+Analyze equipment health
+Evaluate alarm conditions
+Record significant events
+Update the operator dashboard
+Begin the next monitoring cycle
+Example Alarm Lifecycle
 NEW ALARM: TX-102
 
 TX-102 | CRITICAL | Temperature dangerously high
@@ -81,33 +83,65 @@ TX-102 entering RECOVERY mode
 ALARM CLEARED: TX-102
 
 TX-102 returning to NORMAL mode
+Installation
+Requirements
+Python 3.x
+Git
+SQLite
+Clone Repository
+git clone <repository-url>
+cd Nisource_project
+Create Virtual Environment
 
+Windows:
 
+python -m venv venv
+venv\Scripts\activate
+Install Dependencies
 
-Future Improvements:
+Currently, no external packages are required.
 
-Data & Monitoring(
+If future dependencies are added:
+
+pip install -r requirements.txt
+Running GridWatch
+
+Start the monitoring platform:
+
+python main.py
+
+GridWatch will begin executing continuous monitoring cycles, collecting telemetry, evaluating equipment health, managing alarms, and updating the operator dashboard.
+
+Future Development
+Advanced Monitoring & Analytics
 Historical telemetry visualization
-Long-term equipment trends
+Long-term equipment trending
 Rate-of-change analysis
-More realistic electrical equipment models
-External/live telemetry sources
-Configurable monitoring intervals)
-
-Predictive Maintenance(
+More realistic equipment models
+External/live telemetry integration
+Configurable monitoring intervals
+Predictive Maintenance
 Equipment degradation modeling
 Failure prediction
 Statistical anomaly detection
 Predictive maintenance indicators
-Machine-learning-based equipment health analysis)
-
-Cybersecurity(
-SCADA/ICS security monitoring
-Authentication and access monitoring
+Machine-learning-assisted health analysis
+Cybersecurity & ICS Security Monitoring
+Authentication and access control
+Security event monitoring
 Suspicious activity detection
 Unauthorized configuration-change detection
-Network/security event simulation
 Security alert management
-Operational and cybersecurity event correlation)
+Cybersecurity event correlation
+Operational and security-event visibility
+Project Goals
 
+GridWatch is intended to demonstrate the intersection of:
 
+Software Engineering
+SCADA & Industrial Control Systems
+Cybersecurity
+Critical Infrastructure Technology
+Data Analysis & Monitoring
+
+The long-term vision is to evolve GridWatch into a platform capable of simulating both operational technology (OT) monitoring and cybersecurity monitoring within a modern utility environment.
