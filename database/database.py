@@ -44,6 +44,19 @@ def create_tables():
             timestamp TEXT
         )
     """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS security_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            asset_id TEXT,
+            event_type TEXT,
+            severity TEXT,
+            source TEXT,
+            description TEXT,
+            status TEXT,
+            timestamp TEXT
+    )
+""")
     
 
     conn.commit()
@@ -271,6 +284,64 @@ def get_events():
     cursor.execute("""
         SELECT *
         FROM events 
+        ORDER BY id DESC
+    """)
+
+    rows = cursor.fetchall()
+
+    conn.close()
+
+    return rows
+
+
+def insert_security_event(
+    asset_id,
+    event_type,
+    severity,
+    source,
+    description,
+    status,
+    timestamp
+):
+
+    conn = create_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        INSERT INTO security_events
+        (
+            asset_id,
+            event_type,
+            severity,
+            source,
+            description,
+            status,
+            timestamp
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?)
+""", (
+    asset_id,
+    event_type,
+    severity,
+    source,
+    description,
+    status,
+    timestamp
+))
+
+    conn.commit()
+    conn.close()
+
+def get_security_events():
+
+    conn = create_connection()
+
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM security_events
         ORDER BY id DESC
     """)
 

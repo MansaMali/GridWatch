@@ -1,5 +1,7 @@
 import time
 
+from security.security_asset import SecurityAsset
+from security.authentication import AuthenticationEvent
 from datetime import datetime
 from equipment.transformer import Transformer
 from equipment.breaker import Breaker
@@ -16,7 +18,9 @@ from database.database import (
     get_latest_readings,
     insert_health_reports,
     get_health_reports,
-    insert_event
+    insert_event,
+    insert_security_event,
+    get_security_events
 )
 from database.database import get_events
 
@@ -360,11 +364,149 @@ breakers = [
     Breaker("BR-102"),
     Breaker("BR-103")
     ]
+
 capacitors = [
     CapacitorBank("CB-101"),
     CapacitorBank("CB-102"),
     CapacitorBank("CB-103")
     ]
+
+security_assets = [
+    SecurityAsset(
+        "SCADA-SRV-001",
+        "SCADA_SERVER",
+        "10.10.10.10",
+        "CRITICAL"
+    ),
+
+    SecurityAsset(
+        "HMI-001",
+        "HMI",
+        "10.10.10.20",
+        "HIGH"
+    ),
+
+    SecurityAsset(
+        "RTU-001",
+        "RTU",
+        "10.10.20.10",
+        "CRITICAL"
+    ),
+
+    SecurityAsset(
+        "ENG-WS-001",
+        "ENGINEERING_WORKSTATION",
+        "10.10.10.30",
+        "HIGH"
+    )
+]
+
+failed_login_counts = {}
+
+auth_events = [
+   
+    AuthenticationEvent(
+        "operator1",
+        "HMI-001",
+        "SUCCESS"
+    ),
+
+    AuthenticationEvent(
+        "unknown_user",
+        "HMI-001",
+        "FAILED"
+    ),
+
+    AuthenticationEvent(
+        "unknown_user",
+        "RTU-001",
+        "FAILED"
+    ),
+    
+    AuthenticationEvent(
+        "unknown_user",
+        "RTU-001",
+        "FAILED"
+    )            
+]
+
+
+
+print()
+print('===== AUTHENTICATION EVENTS =====')
+
+for event in auth_events:
+
+    print(
+        f"User: {event.username} | "
+        f"Target: {event.target_asset} | "
+        f"Result: {event.result}"
+    )
+
+failed_login_counts = {}
+
+failed_login_threshold = 3
+
+failed_login_targets = {}
+
+for event in auth_events:
+
+    if event.result == "FAILED":
+
+        failed_login_counts[event.username] = (
+            failed_login_counts.get(event.username, 0) + 1
+        )
+
+        failed_login_targets.setdefault(
+            event.username,
+            []
+        ).append(
+            event.target_asset
+        )
+
+print()
+print("===== FAILED LOGIN COUNTS =====")
+
+for username, count in failed_login_counts.items():
+
+    print(
+        f"{username}: {count}"
+    )
+
+    if count >= failed_login_threshold:
+
+        print(
+            f"SECURITY ALERT: "
+            f"{username} reached the failed login threshold"
+        )
+
+        insert_security_event(
+            event.target_asset,
+            "FAILED_LOGIN_THRESHOLD",
+            "MEDIUM",
+            username,
+            "Multiple failed login attempts detected",
+            "OPEN",
+            str(datetime.now())
+        )
+
+print()
+print("===== SECURITY ASSETS =====")
+
+
+for asset in security_assets:
+    print(
+        asset.asset_id,
+        "|",
+        asset.asset_type,
+        "|",
+        asset.ip_address,
+        "|",
+        asset.criticality,
+        "|",
+        asset.status
+    )
+
 
 # Set equipment status
 breakers[0].status = "CLOSED"

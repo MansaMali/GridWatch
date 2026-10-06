@@ -175,8 +175,78 @@ then i ran into a problem with not getting the full transition back into normal 
 
 then I needed to save the alarm system to the database, I did this by addin insert_event to new alarm and alarm clear section. also alarm clear would del the active alarm so I had to save the active alarm as previous_alarm_status to save that information into the insert event.
 
+2026-10-02
+
+Goal: Add the foundational cybersecurity features
+
+Completed: Added basic asset inventory
+
+Lessons learned: reiterated the creation of a class serperated in one folder. called in main.py. I then created a list of assets called security_asset[] (TEMPORARY) inserted their attributes as it aigns with its class then printed a messegae to check if it works.
 
 
+2026-10-03
+
+GOAL: Set up the database
+
+completed: Added insert and get security events to database.py, and added those to main.py import
+
+lessons learned: Another example of patterns and following the same architerture as previous setups. We had to create the database create table for sevurity events and had to create the insert and get security events. I also used a test shown below to see if the it will print the proper message to prove my database was created properly.
+insert_security_event(
+    "RTU-001",
+    "FAILED_LOGIN",
+    "MEDIUM",
+    "UNKNOWN_USER",
+    "Multiple failed login attempts detected",
+    "OPEN",
+    str(datetime.now())
+)
+
+security_events = get_security_events()
+
+print()
+print("===== SECURITY EVENTS =====")
+
+for event in security_events:
+    print(event)
 
 
+2026-10-06
+
+Goal: Start phase 2: authenication monitoring
+
+Completed:
+
+Lessons learned: Started by adding a class with a constructor authentication.py, then called that into main.py with import from syntax. after that I created a list auth_events = [] w/ 1 success and 2 failed to test the import. i printed a message for event in auth_events: with three parameters user,target,and result.
+
+then i created a failed login which links the evens in auth_events with a new dictionary knowk as failed_login_counts. basically the code is if the auth_event result == failure then take the current failed_login_counts and add the new failed login counts +1 to the dictionary failed_login_counts[event.username] failed_login_counts.get(event.username, 0) +1 then for username, count in failed_login_counts.items():
+
+    print(
+        f"{username}: {count}"
+    )
+Which is the snytax needed to print the key and value of a dictionary. you need .items() otherwise you would only get values or keys.
+
+after that I added a login threshold which is accomplished by adding a failed_login_threshold = 3 before the login counter and insde of your print for your login_count dictinary you add if count >= failed_login_threshold:
+
+        print(
+            f"SECURITY ALERT: "
+            f"{username} reached the failed login threshold"
+        )
+currently I only have 2 events that hold failed, so next step was to add 1 more auth_event with a failure result to trigger an alert
+
+i then added a database insert_security event to capture the events in a persistant database rather than in-memory
+
+then I added a failed_login_targets = {} to capture the specific events that for username, count in failed_login_counts.items(): would lose
+
+then inside if event.result == failed I added failed_login_targets.setdefault(
+            event.username,
+            []
+        ).append(
+            event.target_asset
+        )
+which takes the event username, and appens the target asset it attempted to acces inside the failed login targets distionary and saves them their. {
+    "unknown_user": [
+        "HMI-001",
+        "RTU-001"
+    ]
+}
 
