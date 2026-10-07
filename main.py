@@ -33,6 +33,7 @@ def display_operator_dashboard(
     capacitor_data,
     dashboard_health,
     active_alarms,
+    security_events,
 ):
     
     print()
@@ -100,8 +101,21 @@ def display_operator_dashboard(
 
         )
 
+    print()
+    print("SECURITY EVENTS")
+    print("-" * 50)
 
+    for event in security_events[:10]:
 
+        print(
+            f"{event[7]} | "
+            f"{event[1]} | "
+            f"{event[2]} | "
+            f"{event[3]} | "
+            f"{event[4]} | "
+            f"{event[5]} | "
+            f"{event[6]}"
+        )
 
 
     print()
@@ -473,22 +487,46 @@ for username, count in failed_login_counts.items():
         f"{username}: {count}"
     )
 
+    targets = failed_login_targets[username]
+
+    unique_targets = set(targets)
+
+    unique_target_count = len(unique_targets)
+
+
+    print(
+        f"Targets: {list(unique_targets)}"
+    )
+
+
+    print(
+        f"Unique target count: {unique_target_count}"
+    )
+    
+
     if count >= failed_login_threshold:
 
+        severity = "MEDIUM"
+
+        if unique_target_count >1:
+
+            severity = "HIGH"
+
         print(
-            f"SECURITY ALERT: "
+            f"SECURITY ALERT [{severity}]: "
             f"{username} reached the failed login threshold"
         )
 
         insert_security_event(
-            event.target_asset,
+            "AUTH_SYSTEM",
             "FAILED_LOGIN_THRESHOLD",
-            "MEDIUM",
+            severity,
             username,
             "Multiple failed login attempts detected",
             "OPEN",
             str(datetime.now())
         )
+
 
 print()
 print("===== SECURITY ASSETS =====")
@@ -658,12 +696,15 @@ while True:
             temps
         )
 
+    security_events = get_security_events()
+
     display_operator_dashboard(
             transformer_data,
             breaker_data,
             capacitor_data,
             dashboard_health,
             active_alarms,
+            security_events,
     )
 
     events = get_events()

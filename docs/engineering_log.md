@@ -214,7 +214,7 @@ for event in security_events:
 
 Goal: Start phase 2: authenication monitoring
 
-Completed:
+Completed:added basic authentication monitor and failed login threshold
 
 Lessons learned: Started by adding a class with a constructor authentication.py, then called that into main.py with import from syntax. after that I created a list auth_events = [] w/ 1 success and 2 failed to test the import. i printed a message for event in auth_events: with three parameters user,target,and result.
 
@@ -250,3 +250,35 @@ which takes the event username, and appens the target asset it attempted to acce
     ]
 }
 
+
+2026-10-07
+
+Goal: expand authenication monitor to analyze targets (Unique assets vs 1 asset)
+
+Completed: Added unique assets and severity analyzer to the authentication.
+
+Lessons Learned: In order to expad the authentication monitor to analyze whether multiple assets or 1 asset was accessed is to create a a varaible caleld targets which is the failed_login_targets[username] and unique_targets = set(targets) which means only unique items from targets variable show up. then i added a unique target counter with len(unique_targets) to get the amount of unique targets in a number
+
+Next was to create a severity analyzer by added a default varaible severity to be set to medium under the if count >= failed_..._threshold: then under that if unique_target_count >1: severity = high. This states that if the threshold is triggered it automatically becomes a medium severity, if multiple assets were attempted it will triger a high severity which changes the medium default. then I added an insert_security_event with the auth_system to distiguish this event happened into the sql database. than a get_security_events was used to test whether it was succesfully added and the proper message showed in the terminal 
+
+TEST CODE:
+security_events = get_security_events()
+
+print()
+print("===== SECURITY EVENTS =====")
+
+for event in security_events:
+
+    print(
+        f"ID: {event[0]} | "
+        f"Asset: {event[1]} | "
+        f"Type: {event[2]} | "
+        f"Severity: {event[3]} | "
+        f"Source: {event[4]} | "
+        f"Description: {event[5]} | "
+        f"Status: {event[6]} | "
+        f"Time: {event[7]}"
+    )
+
+
+Then to display security events in the dispaly operator i added security_events to the def display operator and its caall within main.py. After that I added security_events = get_security_events to add those events to memory then parse that into the display. Lastly I added a print message for event in security_events[:10]: print event[7][1][2]...
